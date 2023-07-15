@@ -1,17 +1,17 @@
-import "reflect-metadata"
-import { DataSource } from "typeorm"
-import { User } from "./entity/User"
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { User } from "./entity/User";
+import { UserProfile } from "./entity/UserProfile";
+import path = require("path");
+
+const sqlitePath = path.resolve(__dirname, "../database.sqlite");
 
 export const AppDataSource = new DataSource({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "test",
-    password: "test",
-    database: "test",
-    synchronize: true,
-    logging: false,
-    entities: [User],
-    migrations: [],
-    subscribers: [],
-})
+  type: "sqlite",
+  database: sqlitePath,
+  synchronize: true,
+  logging: false,
+  entities: [User, UserProfile],
+  migrations: [],
+  subscribers: [],
+});
