@@ -3,9 +3,9 @@ import { User } from "../entity/User";
 import { UserProfile } from "../entity/UserProfile";
 
 export default class Factory {
-  static user() {
+  static user(sexType?: "female" | "male") {
     const user = new User();
-    const sex = faker.person.sexType();
+    const sex = sexType || faker.person.sexType();
 
     user.firstName = faker.person.firstName(sex);
     user.lastName = faker.person.lastName(sex);
