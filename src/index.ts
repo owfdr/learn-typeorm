@@ -1,20 +1,36 @@
 import { AppDataSource } from "./data-source";
-import { User } from "./entity/User";
-
-import Factory from "./class/Factory";
+import { Image } from "./entity/Image";
+import fs from "fs";
 
 AppDataSource.initialize()
   .then(async () => {
-    const userProfile = Factory.userProfile();
-    const user = Factory.user();
-    user.profile = userProfile;
+    const fileName = "logo.png";
+    const folderPath = "src/image/";
+    const fileBuffer = await fs.promises.readFile(folderPath + fileName);
 
-    await AppDataSource.manager.save(userProfile);
-    await AppDataSource.manager.save(user);
+    const image = new Image();
+    image.fileName = fileName;
+    image.buffer = fileBuffer;
 
-    const users = await AppDataSource.manager.find(User, {
-      relations: ["profile"],
+    await AppDataSource.manager.save(image);
+
+    const images = await AppDataSource.manager.find(Image);
+    const outputPath = "src/output/";
+
+    images.forEach(async (image) => {
+      await fs.promises.writeFile(outputPath + image.fileName, image.buffer);
     });
-    console.log(users);
+
+    // const userProfile = Factory.userProfile();
+    // const user = Factory.user();
+    // user.profile = userProfile;
+
+    // await AppDataSource.manager.save(userProfile);
+    // await AppDataSource.manager.save(user);
+
+    // const users = await AppDataSource.manager.find(User, {
+    //   relations: ["profile"],
+    // });
+    // console.log(users);
   })
   .catch((error) => console.log(error));
