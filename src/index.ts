@@ -1,21 +1,23 @@
-import Factory from "./class/Factory";
 import { User } from "./entity/User";
 import { AppDataSource } from "./data-source";
-import { Todo } from "./entity/Todo";
+import Factory from "./class/Factory";
 
 (async () => {
   await AppDataSource.initialize();
 
-  const todo = Factory.todo();
-  const tagA = Factory.tag();
-  const tagB = Factory.tag();
+  const user = Factory.user();
+  // user.profile = Factory.userProfile();
+  await AppDataSource.manager.save(user);
 
-  todo.tags = [tagA, tagB];
+  const users = await AppDataSource.getRepository(User)
+    .createQueryBuilder("user")
+    .leftJoinAndSelect("user.profile", "profile")
+    // .innerJoinAndSelect("user.profile", "profile")
+    .leftJoinAndSelect("user.todos", "todo")
+    .where("user.sex = :sex")
+    .orderBy("user.id", "DESC")
+    .setParameters({ sex: "male" })
+    .getMany();
 
-  // this order is really important
-  await AppDataSource.manager.save(tagA);
-  await AppDataSource.manager.save(tagB);
-  await AppDataSource.manager.save(todo);
-
-  console.log(await AppDataSource.manager.find(Todo, { relations: ["tags"] }));
+  console.log(users);
 })();
