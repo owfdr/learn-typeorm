@@ -1,19 +1,21 @@
 import Factory from "./class/Factory";
 import { User } from "./entity/User";
 import { AppDataSource } from "./data-source";
+import { Todo } from "./entity/Todo";
 
 (async () => {
   await AppDataSource.initialize();
-  const userRepository = AppDataSource.getRepository(User);
 
-  const user = Factory.user();
-  const todo1 = Factory.todo();
-  const todo2 = Factory.todo();
+  const todo = Factory.todo();
+  const tagA = Factory.tag();
+  const tagB = Factory.tag();
 
-  user.todos = [todo1, todo2];
+  todo.tags = [tagA, tagB];
 
-  await userRepository.save(user);
+  // this order is really important
+  await AppDataSource.manager.save(tagA);
+  await AppDataSource.manager.save(tagB);
+  await AppDataSource.manager.save(todo);
 
-  const users = await userRepository.find({ relations: ["todos"] });
-  console.log(users);
+  console.log(await AppDataSource.manager.find(Todo, { relations: ["tags"] }));
 })();

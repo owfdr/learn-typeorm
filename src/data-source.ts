@@ -5,6 +5,7 @@ import { User } from "./entity/User";
 import { UserProfile } from "./entity/UserProfile";
 import { Image } from "./entity/Image";
 import { Todo } from "./entity/Todo";
+import { Tag } from "./entity/Tag";
 
 const sqlitePath = path.resolve(__dirname, "../database.sqlite");
 
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: sqlitePath,
   synchronize: true,
   logging: false,
-  entities: [User, UserProfile, Image, Todo],
+  entities: [User, UserProfile, Image, Todo, Tag],
   migrations: [],
   subscribers: [],
 });

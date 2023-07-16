@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { User } from "../entity/User";
 import { UserProfile } from "../entity/UserProfile";
 import { Todo } from "../entity/Todo";
+import { Tag } from "../entity/Tag";
 
 export default class Factory {
   static user(sexType?: "female" | "male") {
@@ -29,5 +30,12 @@ export default class Factory {
     todo.text = `${faker.word.verb()} ${faker.word.noun()}`;
 
     return todo;
+  }
+
+  static tag() {
+    const tag = new Tag();
+    tag.name = faker.word.adjective();
+
+    return tag;
   }
 }
