@@ -24,7 +24,7 @@ export class User {
   @Column()
   sex: string;
 
-  @OneToOne(() => UserProfile, { nullable: true })
+  @OneToOne(() => UserProfile, (profile) => profile.user, { nullable: true })
   @JoinColumn()
   profile: UserProfile;
 }
