@@ -4,6 +4,7 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  Relation,
 } from "typeorm";
 import { UserProfile } from "./UserProfile";
 
@@ -26,5 +27,5 @@ export class User {
 
   @OneToOne(() => UserProfile, (profile) => profile.user, { nullable: true })
   @JoinColumn()
-  profile: UserProfile;
+  profile: Relation<UserProfile>;
 }

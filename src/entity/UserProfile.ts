@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  Relation,
+} from "typeorm";
 import { User } from "./User";
 
 @Entity()
@@ -13,5 +19,5 @@ export class UserProfile {
   bio: string;
 
   @OneToOne(() => User, (user) => user.profile)
-  user: User;
+  user: Relation<User>;
 }
