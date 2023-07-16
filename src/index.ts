@@ -6,20 +6,18 @@ import { AppDataSource } from "./data-source";
   await AppDataSource.initialize();
   const userRepository = AppDataSource.getRepository(User);
 
-  // using find method
+  const user = Factory.user();
+  const profile = Factory.userProfile();
+
+  user.profile = profile;
+  await userRepository.save(user);
+
+  user.profile.nationality = "Japan";
+  await userRepository.save(user);
+
   console.log(
-    "All users: ",
     await userRepository.find({
       relations: ["profile"],
     })
-  );
-
-  // using query builder
-  console.log(
-    "All users: ",
-    await userRepository
-      .createQueryBuilder("user")
-      .leftJoinAndSelect("user.profile", "profile")
-      .getMany()
   );
 })();

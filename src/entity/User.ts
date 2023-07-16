@@ -25,7 +25,10 @@ export class User {
   @Column()
   sex: string;
 
-  @OneToOne(() => UserProfile, (profile) => profile.user, { nullable: true })
+  @OneToOne(() => UserProfile, (profile) => profile.user, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinColumn()
   profile: Relation<UserProfile>;
 }
