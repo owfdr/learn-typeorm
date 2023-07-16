@@ -7,17 +7,13 @@ import { AppDataSource } from "./data-source";
   const userRepository = AppDataSource.getRepository(User);
 
   const user = Factory.user();
-  const profile = Factory.userProfile();
+  const todo1 = Factory.todo();
+  const todo2 = Factory.todo();
 
-  user.profile = profile;
+  user.todos = [todo1, todo2];
+
   await userRepository.save(user);
 
-  user.profile.nationality = "Japan";
-  await userRepository.save(user);
-
-  console.log(
-    await userRepository.find({
-      relations: ["profile"],
-    })
-  );
+  const users = await userRepository.find({ relations: ["todos"] });
+  console.log(users);
 })();

@@ -5,8 +5,10 @@ import {
   OneToOne,
   JoinColumn,
   Relation,
+  OneToMany,
 } from "typeorm";
 import { UserProfile } from "./UserProfile";
+import { Todo } from "./Todo";
 
 @Entity()
 export class User {
@@ -31,4 +33,9 @@ export class User {
   })
   @JoinColumn()
   profile: Relation<UserProfile>;
+
+  @OneToMany(() => Todo, (todo) => todo.user, {
+    cascade: true,
+  })
+  todos: Todo[];
 }

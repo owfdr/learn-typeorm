@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { User } from "../entity/User";
 import { UserProfile } from "../entity/UserProfile";
+import { Todo } from "../entity/Todo";
 
 export default class Factory {
   static user(sexType?: "female" | "male") {
@@ -21,5 +22,12 @@ export default class Factory {
     userProfile.bio = faker.person.bio();
 
     return userProfile;
+  }
+
+  static todo() {
+    const todo = new Todo();
+    todo.text = `${faker.word.verb()} ${faker.word.noun()}`;
+
+    return todo;
   }
 }
