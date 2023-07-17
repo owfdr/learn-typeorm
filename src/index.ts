@@ -1,23 +1,25 @@
-import { User } from "./entity/User";
+import { Tesla } from "./entity/Tesla";
+import { Toyota } from "./entity/Toyota";
 import { AppDataSource } from "./data-source";
-import Factory from "./class/Factory";
+import { Vehicle } from "./entity/Vehicle";
 
 (async () => {
   await AppDataSource.initialize();
 
-  const user = Factory.user();
-  // user.profile = Factory.userProfile();
-  await AppDataSource.manager.save(user);
+  const bike = new Vehicle();
+  bike.name = "BMX";
+  await AppDataSource.manager.save(bike);
 
-  const users = await AppDataSource.getRepository(User)
-    .createQueryBuilder("user")
-    .leftJoinAndSelect("user.profile", "profile")
-    // .innerJoinAndSelect("user.profile", "profile")
-    .leftJoinAndSelect("user.todos", "todo")
-    .where("user.sex = :sex")
-    .orderBy("user.id", "DESC")
-    .setParameters({ sex: "male" })
-    .getMany();
+  const tesla = new Tesla();
+  tesla.name = "Tesla Model 3";
+  tesla.isElectric = true;
+  await AppDataSource.manager.save(tesla);
 
-  console.log(users);
+  const toyota = new Toyota();
+  toyota.name = "Toyota Corolla";
+  toyota.isAffordable = true;
+  await AppDataSource.manager.save(toyota);
+
+  const vehicles = await AppDataSource.manager.find(Vehicle);
+  console.log(vehicles);
 })();
