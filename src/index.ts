@@ -1,25 +1,31 @@
-import { Tesla } from "./entity/Tesla";
-import { Toyota } from "./entity/Toyota";
 import { AppDataSource } from "./data-source";
-import { Vehicle } from "./entity/Vehicle";
+import { Node } from "./entity/Node";
 
 (async () => {
   await AppDataSource.initialize();
+  await AppDataSource.manager.clear(Node);
 
-  const bike = new Vehicle();
-  bike.name = "BMX";
-  await AppDataSource.manager.save(bike);
+  const root = new Node();
+  root.name = "root";
+  await AppDataSource.manager.save(root);
 
-  const tesla = new Tesla();
-  tesla.name = "Tesla Model 3";
-  tesla.isElectric = true;
-  await AppDataSource.manager.save(tesla);
+  const task = new Node();
+  task.name = "task";
+  task.parent = root;
+  await AppDataSource.manager.save(task);
 
-  const toyota = new Toyota();
-  toyota.name = "Toyota Corolla";
-  toyota.isAffordable = true;
-  await AppDataSource.manager.save(toyota);
+  const todo = new Node();
+  todo.name = "todo";
+  todo.parent = root;
+  await AppDataSource.manager.save(todo);
 
-  const vehicles = await AppDataSource.manager.find(Vehicle);
-  console.log(vehicles);
+  const learnCalculus = new Node();
+  learnCalculus.name = "learn calculus";
+  learnCalculus.parent = task;
+  await AppDataSource.manager.save(learnCalculus);
+
+  const nodes = await AppDataSource.manager
+    .getTreeRepository(Node)
+    .findDescendantsTree(root, { depth: 1 });
+  console.log(nodes);
 })();
